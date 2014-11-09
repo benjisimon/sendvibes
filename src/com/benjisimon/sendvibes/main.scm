@@ -23,7 +23,8 @@
 
  ((on-vibe-click (view :: android.view.View))
   (let ((vibr ((this):getSystemService android.content.Context:VIBRATOR_SERVICE)))
-    (Vibrator:vibrate vibr 300)))
+    (let ((sample '("Test" "xxx" (300 300) (600 300) (300 300))))
+      (Vibrator:vibrate vibr (apply long[] (entry-vibe-pattern sample)) -1))))
 
 
  (on-create-view R$layout:main))
