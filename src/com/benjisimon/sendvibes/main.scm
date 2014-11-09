@@ -21,10 +21,29 @@
     (inflator:inflate R$menu:main menu)
     #t))
 
- ((on-vibe-click (view :: android.view.View))
-  (let ((vibr ((this):getSystemService android.content.Context:VIBRATOR_SERVICE)))
-    (let ((sample '("Test" "xxx" (300 300) (600 300) (300 300))))
-      (Vibrator:vibrate vibr (apply long[] (entry-vibe-pattern sample)) -1))))
+ (on-create-view
+  (define (vibrate pattern)
+    (let ((vibr ((this):getSystemService android.content.Context:VIBRATOR_SERVICE)))
+      (Vibrator:vibrate vibr (apply long[] pattern) -1)))
 
+  (define (get-config)
+    `(("Click Me" "xxx" (400 300) (800 300))
+      ("And Me!"  "xxx" (900 200) (300 200) (900 200))))
 
- (on-create-view R$layout:main))
+  (let ((config (get-config))
+        (box    (LinearLayout (this)
+                              orientation: LinearLayout:VERTICAL)))
+    (if config
+      (for-each (lambda (e)
+                  (LinearLayout:add-view box 
+                                         (Button (this)
+                                                 text: (as string (entry-button e))
+                                                 on-click-listener: 
+                                                 (lambda (v)
+                                                   (vibrate (entry-vibe-pattern e))))))
+                config)
+      (LinearLayout:add-view box
+                             (TextView (this)
+                                       text: "Edit the configuration to see some buttons here.")))
+    box))
+ )

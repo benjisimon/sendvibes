@@ -25,8 +25,6 @@
                                      (lambda ()
                                        (expand-config config)
                                        #t)))))
-   
-
 (define (expand-config config)
   (eval config))
 
