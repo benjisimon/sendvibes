@@ -3,6 +3,10 @@
 ;;
 
 (require 'android-defs)
+(require <com.benjisimon.sendvibes.lib.config>)
+
+(define-alias Vibrator android.os.Vibrator)
+
 
 (define (logi . entries)
   (for-each (lambda (e) 
@@ -16,7 +20,10 @@
   (let ((inflator ((this):get-menu-inflater)))
     (inflator:inflate R$menu:main menu)
     #t))
-                         
- (on-create-view 
-  R$layout:main))
-                 
+
+ ((on-vibe-click (view :: android.view.View))
+  (let ((vibr ((this):getSystemService android.content.Context:VIBRATOR_SERVICE)))
+    (Vibrator:vibrate vibr 300)))
+
+
+ (on-create-view R$layout:main))
