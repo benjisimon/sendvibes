@@ -14,7 +14,13 @@
 ;;
 ;;
 (module-name (lib config))
-(module-export valid-config? expand-config entry-button entry-to entry-vibe-pattern)
+(module-export valid-config? expand-config entry-button entry-to entry-vibe-pattern
+               config-get config-set!)
+
+(define-alias SharedPreferences  android.content.SharedPreferences)
+(define-alias SharedPreferences$Editor  android.content.SharedPreferences$Editor)
+(define-alias Context            android.content.Context)
+
 
 (require 'srfi-1)
 
@@ -48,4 +54,15 @@
                  (map (lambda (x)
                         (if (list? x) x (list x)))
                       pattern)))))
+
+
   
+(define (config-get (ctx :: Context))
+  (let* ((prefs (Context:getSharedPreferences ctx "config" 0)))
+    (SharedPreferences:get-string prefs "config" "")))
+
+(define (config-set! (ctx :: Context) config)
+  (let* ((prefs (Context:getSharedPreferences ctx "config" 0))
+         (editor (SharedPreferences:edit prefs)))
+    (SharedPreferences$Editor:put-string editor "config" config)
+    (SharedPreferences$Editor:commit editor)))

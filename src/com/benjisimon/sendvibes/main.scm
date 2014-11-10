@@ -4,8 +4,11 @@
 
 (require 'android-defs)
 (require <com.benjisimon.sendvibes.lib.config>)
+(require <com.benjisimon.sendvibes.settings>)
 
 (define-alias Vibrator android.os.Vibrator)
+(define-alias MenuItem  android.view.MenuItem)
+(define-alias Intent  android.content.Intent)
 
 
 (define (logi . entries)
@@ -21,19 +24,31 @@
     (inflator:inflate R$menu:main menu)
     #t))
 
+ ((on-options-item-selected (item :: MenuItem))
+  (let ((selected (MenuItem:getItemId item)))
+    (cond ((equal? selected R$id:action_settings)
+           (let ((intent (Intent (this) settings)))
+             (Context:startActivity (this) intent)
+             #t))
+          (else #f))))
+
+   
+
  (on-create-view
   (define (vibrate pattern)
-    (let ((vibr ((this):getSystemService android.content.Context:VIBRATOR_SERVICE)))
+    (let ((vibr ((this):getSystemService Context:VIBRATOR_SERVICE)))
       (Vibrator:vibrate vibr (apply long[] pattern) -1)))
 
-  (define (get-config)
-    `(("Click Me" "xxx" (400 300) (800 300))
-      ("And Me!"  "xxx" (900 200) (300 200) (900 200))))
+  (define (empty? x)
+    (equal? x ""))
 
-  (let ((config (get-config))
+  (let ((config (config-get (this)))
         (box    (LinearLayout (this)
                               orientation: LinearLayout:VERTICAL)))
-    (if config
+    (if (empty? config)
+      (LinearLayout:add-view box
+                             (TextView (this)
+                                       text: "Edit the configuration to see some buttons here."))
       (for-each (lambda (e)
                   (LinearLayout:add-view box 
                                          (Button (this)
@@ -41,9 +56,6 @@
                                                  on-click-listener: 
                                                  (lambda (v)
                                                    (vibrate (entry-vibe-pattern e))))))
-                config)
-      (LinearLayout:add-view box
-                             (TextView (this)
-                                       text: "Edit the configuration to see some buttons here.")))
+                config))
     box))
  )

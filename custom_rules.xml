@@ -18,6 +18,7 @@
          <arg line="-P ${project.app.package}. --warn-undefined-variable --module-static-run --warn-invoke-unknown-method --warn-as-error" />
          <arg value="-C" />
          <arg file="src/${project.app.package.path}/lib/config.scm" />
+         <arg file="src/${project.app.package.path}/settings.scm" />
          <arg file="src/${project.app.package.path}/${android.activity.name}.scm" />
       </java>
    </target>

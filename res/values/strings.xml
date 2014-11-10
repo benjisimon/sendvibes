@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">SendVibes</string>
-  <string name="edit_message">Yo! Edit</string>
-  <string name="button_send">Heave Ho!</string>
-  <string name="action_search">Findy, Findy</string>
-  <string name="action_settings">Settins</string>
+  <string name="settings_name">Setup</string>
+  <string name="action_settings">Setup</string>
 </resources>

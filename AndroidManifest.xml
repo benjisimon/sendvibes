@@ -13,6 +13,12 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <activity android:name="settings"
+              android:label="@string/settings_name"
+              android:parentActivityName="main" >
+
+    </activity>              
   </application>
   <uses-permission android:name="android.permission.VIBRATE"/>
 </manifest>
